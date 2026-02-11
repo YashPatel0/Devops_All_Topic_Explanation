@@ -301,11 +301,4 @@ dmesg
 
 ---
 
-# 👨‍💻 Author
-
-Linux & DevOps Command Reference  
-Created for Learning, Practice & Interviews 🚀
-
----
-
 ⭐ If this helped you, consider starring the repository!
