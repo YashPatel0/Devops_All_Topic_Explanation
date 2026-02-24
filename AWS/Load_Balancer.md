@@ -1,222 +1,180 @@
-# AWS Elastic Load Balancing (ELB) – Complete Beginner Guide
+# AWS Application Load Balancer (ALB) – Step-by-Step Beginner Guide
 
-This **README.md** explains **AWS Elastic Load Balancing (ELB)** in a **simple, step-by-step way** so that even a beginner can understand it easily.
-
----
-
-## What is Elastic Load Balancing?
-
-**Elastic Load Balancing (ELB)** automatically distributes incoming traffic across multiple targets such as:
-
-- EC2 instances  
-- Containers  
-- IP addresses  
-
-👉 Think of a Load Balancer like a **traffic manager** that sends users to different servers so no single server becomes overloaded.
-
-Without a Load Balancer:
-
-- One server handles all traffic  
-- If it crashes → Application goes down  
-
-With a Load Balancer:
-
-- Traffic is distributed  
-- High availability is maintained  
-- Application becomes fault tolerant  
+This **README.md** explains how to create and test an **AWS Application Load Balancer** using **simple language**. It is written for **beginners / freshers**.
 
 ---
 
-## Why Do We Need Load Balancer?
+## What is a Load Balancer? (Simple Explanation)
 
-Load Balancer is used to:
+A **Load Balancer** distributes incoming traffic across multiple EC2 instances so that:
 
-- Improve application availability  
-- Distribute traffic evenly  
-- Handle high traffic automatically  
-- Remove unhealthy servers automatically  
-- Improve scalability  
+- No single server is overloaded
+- Application remains available even if one server fails
 
-> **If one server fails, traffic is automatically redirected to healthy servers**
+Example:
 
----
-
-## Types of AWS Load Balancers
-
-### 1. Application Load Balancer (ALB)
-
-- Works at Layer 7 (HTTP/HTTPS)
-- Supports path-based routing (`/api`, `/login`)
-- Best for web applications
-- Supports SSL termination
+- User requests → Load Balancer → EC2 Instance 1 or EC2 Instance 2
 
 ---
 
-### 2. Network Load Balancer (NLB)
+## Prerequisites
 
-- Works at Layer 4 (TCP/UDP)
-- Ultra-high performance
-- Low latency
-- Supports static IP
+Before starting, make sure you have:
 
----
-
-### 3. Gateway Load Balancer (GWLB)
-
-- Used for security appliances
-- Firewall and traffic inspection
-- Works with third-party security tools
+- AWS account
+- 2 EC2 instances running
+- Instances in **different Availability Zones (AZs)**
+- HTTP server installed on both instances (Apache / Nginx)
+- Security group allowing **HTTP (port 80)**
 
 ---
 
-## Key Components of Load Balancer
+# STEP 1: Create EC2 Instances in Different AZs
 
-- **Listener** – Checks incoming requests (HTTP/HTTPS)
-- **Target Group** – Contains EC2 instances
-- **Health Check** – Monitors server health
-- **Availability Zones** – Provides high availability
+1. Go to **EC2 Dashboard → Instances**
+2. Launch **2 EC2 instances**
+3. Select:
+   - AMI: Ubuntu 20.04 / 22.04
+   - Instance type: t2.micro or t3.micro
 
----
-
-## Load Balancer Architecture
-
-Example flow:
-
-User → Load Balancer → Target Group → EC2 Instances  
-
-Load Balancer distributes traffic across multiple Availability Zones for reliability.
+4. While launching:
+   - Select **different AZs** (example: us-east-1a, us-east-1b)
+   - Enable **HTTP (port 80)** in security group
 
 ---
 
-## Step-by-Step: Create Application Load Balancer
+## Step 1.1: Install Web Server on Each Instance
 
-### Step 1: Launch EC2 Instances
-
-- Launch **2 EC2 instances**
-- Place them in **different Availability Zones**
-- Allow **HTTP (port 80)** in Security Group
-- Install web server (Apache / Nginx)
-
-Example (Ubuntu):
+SSH into each instance and install Apache:
 
 ```bash
 sudo apt update
 sudo apt install apache2 -y
 ```
 
+(Optional) Change index page to identify server:
+
+```bash
+echo "This is Server 1" | sudo tee /var/www/html/index.html
+```
+
+On second instance:
+
+```bash
+echo "This is Server 2" | sudo tee /var/www/html/index.html
+```
+
 ---
 
-### Step 2: Create Target Group
+# STEP 2: Create a Target Group
 
-1. Go to **EC2 → Target Groups**
-2. Click **Create Target Group**
-3. Select:
-   - Target type: Instances
-   - Protocol: HTTP
-   - Port: 80
-4. Register both EC2 instances
-5. Click **Create**
+A **Target Group** tells the Load Balancer **where to send traffic**.
+
+### Step 2.1: Open Target Groups
+
+1. Go to **EC2 Dashboard**
+2. Click **Target Groups** (left menu)
+3. Click **Create target group**
 
 ---
 
-### Step 3: Create Load Balancer
+### Step 2.2: Configure Target Group
+
+1. Target type: **Instances**
+2. Protocol: **HTTP**
+3. Port: **80**
+4. VPC: Select your VPC
+5. Click **Next**
+
+---
+
+### Step 2.3: Register Targets
+
+1. Select **both EC2 instances**
+2. Click **Include as pending below**
+3. Click **Create target group**
+
+---
+
+# STEP 3: Create Load Balancer
+
+### Step 3.1: Open Load Balancers
+
+1. Go to **EC2 Dashboard**
+2. Click **Load Balancers**
+3. Click **Create load balancer**
+
+---
+
+### Step 3.2: Choose Load Balancer Type
+
+1. Select **Application Load Balancer**
+2. Click **Create**
+
+---
+
+### Step 3.3: Configure Load Balancer
+
+1. Name: `my-alb`
+2. Scheme: **Internet-facing**
+3. IP address type: IPv4
+4. Listeners: HTTP on port 80
+
+---
+
+# STEP 4: Create Security Group for Load Balancer
+
+### Step 4.1: Create Security Group
+
+Inbound rules:
+
+- HTTP (80) → Source: Anywhere (0.0.0.0/0)
+
+Outbound rules:
+
+- Allow **All traffic**
+
+Attach this security group to the Load Balancer.
+
+---
+
+# STEP 5: Attach Target Group
+
+1. Select the **target group** you created earlier
+2. Click **Create load balancer**
+
+Wait until the Load Balancer status becomes **Active**.
+
+---
+
+# STEP 6: Test Load Balancer
+
+1. Copy the **DNS name** of the Load Balancer
+2. Paste it into your browser
+
+Example:
+
+```
+http://my-alb-123456.us-east-1.elb.amazonaws.com
+```
+
+Refresh multiple times — you should see:
+
+- "This is Server 1"
+- "This is Server 2"
+
+This confirms traffic is being balanced.
+
+---
+
+# STEP 7: Verify Using Resource Map
 
 1. Go to **EC2 → Load Balancers**
-2. Click **Create Load Balancer**
-3. Select **Application Load Balancer**
-
-Configure:
-
-- Scheme: Internet-facing
-- IP type: IPv4
-- Listener: HTTP (80)
-- Select at least 2 AZs
+2. Select your Load Balancer
+3. Click **Resource Map**
+4. Verify:
+   - Load Balancer → Target Group → EC2 Instances
 
 ---
 
-### Step 4: Configure Security Group
-
-Inbound rule:
-
-- HTTP (80) → 0.0.0.0/0  
-
-Outbound rule:
-
-- Allow all traffic
-
----
-
-### Step 5: Attach Target Group
-
-- Select the created Target Group
-- Click **Create Load Balancer**
-- Wait until status becomes **Active**
-
----
-
-## Step 6: Test Load Balancer
-
-1. Copy the DNS name of Load Balancer
-2. Paste into browser:
-
-```
-http://your-load-balancer-dns
-```
-
-Refresh multiple times.
-
-You should see different servers responding.
-
----
-
-## Health Checks
-
-Load Balancer automatically:
-
-- Checks if instance is responding
-- Removes unhealthy instances
-- Routes traffic only to healthy instances
-
----
-
-## Load Balancer vs Single EC2
-
-| Feature | Load Balancer | Single EC2 |
-|----------|---------------|------------|
-| High Availability | Yes | No |
-| Fault Tolerance | Yes | No |
-| Auto Scaling Support | Yes | Limited |
-| Traffic Distribution | Yes | No |
-
----
-
-## Pricing (Simple)
-
-You pay for:
-
-- Running hours  
-- Data processed  
-- Number of requests  
-
----
-
-## Real-World Use Cases
-
-- Hosting web applications  
-- Production environments  
-- Microservices architecture  
-- High-traffic applications  
-
----
-
-## Best Practices
-
-- Use at least 2 Availability Zones  
-- Enable HTTPS using ACM  
-- Use health checks properly  
-- Integrate with Auto Scaling  
-- Monitor using CloudWatch  
-
----
-
-🎉 **You now understand AWS Load Balancer clearly and practically!**
+🎉 **Congratulations! You have successfully created an AWS Load Balancer.**
