@@ -7,25 +7,27 @@ Kubernetes is like a manager for Docker containers that makes sure your applicat
 
 # Architecture of Kubernetes
 
-          ┌───────────────────────┐
-          │      Control Plane    │
-          │-----------------------│
-          │  API Server           │
-          │  etcd                 │
-          │  Scheduler            │
-          │  Controller Manager   │
-          └─────────┬─────────────┘
-                    │
-         ┌──────────┴───────────┐
-         │                      │
-   ┌─────────────┐       ┌─────────────┐
-   │  Worker Node│       │ Worker Node │
-   │-------------│       │-------------│
-   │ kubelet     │       │ kubelet     │
-   │ kube-proxy  │       │ kube-proxy  │
-   │ Container   │       │ Container   │
-   │ Runtime     │       │ Runtime     │
-   └─────────────┘       └─────────────┘
+```
+                           ┌───────────────────────────────┐
+                           │          CONTROL PLANE        │
+                           │───────────────────────────────│
+                           │  • API Server                 │
+                           │  • etcd                       │
+                           │  • Scheduler                  │
+                           │  • Controller Manager         │
+                           └───────────────┬───────────────┘
+                                           │
+                    ┌──────────────────────┴──────────────────────┐
+                    │                                             │
+        ┌────────────────────────┐                  ┌────────────────────────┐
+        │       WORKER NODE 1    │                  │       WORKER NODE 2    │
+        │────────────────────────│                  │────────────────────────│
+        │  • kubelet             │                  │  • kubelet             │
+        │  • kube-proxy          │                  │  • kube-proxy          │
+        │  • Container Runtime   │                  │  • Container Runtime   │
+        │      (Docker/containerd)│                 │      (Docker/containerd)│
+        └────────────────────────┘                  └────────────────────────┘
+```
 
 # Explination
 
