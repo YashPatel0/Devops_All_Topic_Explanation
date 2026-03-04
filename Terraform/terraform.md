@@ -306,19 +306,6 @@ terraform-project/
 
 ---
 
-## 🔎 Simple Explanation
-
-- **Docker** → Creates and runs containers.
-- **Kubernetes** → Manages and controls containers at scale.
-
----
-
-## 📌 Real World Analogy
-
-- Docker = You pack lunch boxes.
-- Kubernetes = You manage delivery of thousands of lunch boxes to different locations.
-
----
 
 ## 🧠 Terraform Interview Concepts
 
