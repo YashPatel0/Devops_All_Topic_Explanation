@@ -371,6 +371,37 @@ terraform-project/
 
 ---
 
+# 6️⃣ Docker vs Kubernetes
+
+| Docker | Kubernetes |
+|--------|------------|
+| Docker is a containerization platform. | Kubernetes is a container orchestration platform. |
+| It is used to build, package, and run containers. | It is used to manage, deploy, and scale containers. |
+| Works on a single host (by default). | Works on a cluster of multiple nodes. |
+| Manages individual containers. | Manages multiple containers across multiple servers. |
+| No built-in auto scaling. | Supports auto scaling of pods. |
+| No built-in self-healing. | Supports self-healing (restarts failed pods automatically). |
+| Simple to set up and use. | More complex setup compared to Docker. |
+| Uses Docker Engine to run containers. | Uses container runtime (Docker, containerd, etc.) to run containers. |
+| Focus is on container creation. | Focus is on container orchestration. |
+| Example: Running a Node.js app in a container. | Example: Managing thousands of containers in production. |
+
+---
+
+## 🔎 Simple Explanation
+
+- **Docker** → Creates and runs containers.
+- **Kubernetes** → Manages and controls containers at scale.
+
+---
+
+## 📌 Real World Analogy
+
+- Docker = You pack lunch boxes.
+- Kubernetes = You manage delivery of thousands of lunch boxes to different locations.
+
+---
+
 ## 🧠 Terraform Interview Concepts
 
 - What is Terraform state?
