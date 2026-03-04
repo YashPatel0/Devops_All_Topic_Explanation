@@ -606,3 +606,86 @@ spec:
     matchLabels:
       app: my-app
 ```
+
+## 🧠 Kubernetes Controller Comparisons (From Notes)
+
+
+# 1️⃣ ReplicaSet vs StatefulSet
+
+| ReplicaSet | StatefulSet |
+|------------|-------------|
+| It maintains a specified number of identical pods running at all times. | It manages stateful pods that require unique identity & persistent storage. |
+| Mainly used for stateless applications. | Used for stateful applications. |
+| Pod names are randomly generated. | Pods have fixed and ordered names. |
+| Pods are created and deleted in any order. | Pods are created sequentially and deleted in reverse order. |
+| If a pod fails, a new pod is created with a different identity. | If a pod fails, it is created with the same identity & storage. |
+| Commonly created automatically by Deployment. | Created directly using StatefulSet YAML manifest. |
+| Example use case: Web applications. | Example use case: MongoDB, MySQL. |
+
+---
+
+# 2️⃣ ReplicationController vs ReplicaSet
+
+| ReplicationController | ReplicaSet |
+|------------------------|------------|
+| ReplicationController is the older K8s controller used to maintain a specified number of pod replicas. | ReplicaSet is newer & improved version used to maintain a specified number of pod replicas. |
+| Supports only equality-based selector. | Supports set-based selector along with equality-based selector. |
+| ReplicationController is deprecated in modern Kubernetes usage. | ReplicaSet is actively used & recommended. |
+| Usually created using a YAML file manually. | Often created automatically by a Deployment. |
+| Limited features compared to ReplicaSet. | ReplicaSet is the improved replacement for ReplicationController. |
+
+---
+
+# 3️⃣ ReplicaSet vs Deployment
+
+| ReplicaSet | Deployment |
+|------------|------------|
+| ReplicaSet ensures that a fixed number of pods are always running. | Deployment manages lifecycle & updates of an application. |
+| ReplicaSet directly manages & creates pods. | Deployment manages ReplicaSet which then manages pods. |
+| It does not support rolling updates and rollback. | It supports rolling updates & rollback to previous versions. |
+| Mainly used to maintain pod replicas. | Used for deploying, updating & scaling applications. |
+| ReplicaSet is not usually used directly. | Deployment is used to deploy applications. |
+
+---
+
+# 4️⃣ DaemonSet vs StatefulSet
+
+| DaemonSet | StatefulSet |
+|------------|-------------|
+| DaemonSet runs one pod on every node in the cluster. | StatefulSet runs pods with unique identity & stable storage. |
+| Pods are identical on all nodes. | Each pod is unique. |
+| Pod scheduling depends on number of nodes. | Pod scheduling depends on replica count. |
+| Names of the pods are not fixed. | Names of the pods are fixed & ordered. |
+| Pods are created at once. | Pods are created in order. |
+| Mostly used for logging, monitoring, networking agents. | Mostly used in databases like MongoDB, MySQL. |
+
+---
+
+# 5️⃣ ReplicationController vs Deployment
+
+| ReplicationController | Deployment |
+|------------------------|------------|
+| It ensures a specified number of pods are running at all times. | Deployment manages application deployment and updates. |
+| ReplicationController directly creates & manages pods. | It manages & creates ReplicaSets which then manage pods. |
+| Does not support rolling updates & rollbacks. | It supports rolling updates as well as rollback to previous versions. |
+| It uses equality-based selectors only. | Uses set-based and equality-based selectors. |
+| It is older K8s controller. | It is newer & advanced controller. |
+
+---
+
+# 6️⃣ Docker vs Kubernetes
+
+| Docker | Kubernetes |
+|--------|------------|
+| Docker is a containerization platform. | Kubernetes is a container orchestration platform. |
+| It is used to build, package, and run containers. | It is used to manage, deploy, and scale containers. |
+| Works on a single host (by default). | Works on a cluster of multiple nodes. |
+| Manages individual containers. | Manages multiple containers across multiple servers. |
+| No built-in auto scaling. | Supports auto scaling of pods. |
+| No built-in self-healing. | Supports self-healing (restarts failed pods automatically). |
+| Simple to set up and use. | More complex setup compared to Docker. |
+| Uses Docker Engine to run containers. | Uses container runtime (Docker, containerd, etc.) to run containers. |
+| Focus is on container creation. | Focus is on container orchestration. |
+| Example: Running a Node.js app in a container. | Example: Managing thousands of containers in production. |
+
+---
