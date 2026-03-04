@@ -305,9 +305,8 @@ terraform-project/
 - Add `terraform.tfstate` to `.gitignore`
 
 ---
-##  Kubernetes Controller Comparisons (From Notes)
+## 🧠 Kubernetes Controller Comparisons (From Notes)
 
----
 
 # 1️⃣ ReplicaSet vs StatefulSet
 
