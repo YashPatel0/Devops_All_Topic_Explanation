@@ -25,7 +25,7 @@ Kubernetes is like a manager for Docker containers that makes sure your applicat
         │  • kubelet             │                  │  • kubelet             │
         │  • kube-proxy          │                  │  • kube-proxy          │
         │  • Container Runtime   │                  │  • Container Runtime   │
-        │      (Docker/containerd)│                 │      (Docker/containerd)│
+        │     (Docker/containerd)│                  │     (Docker/containerd)│
         └────────────────────────┘                  └────────────────────────┘
 ```
 
